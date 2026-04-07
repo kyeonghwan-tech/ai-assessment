@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>파트 4: AX 교육 도입 실행 가이드</title>
+  <style>
+    :root {
+      --primary:#4f46e5; --primary-light:#eef2ff; --primary-dark:#3730a3;
+      --accent:#06b6d4; --success:#10b981; --warning:#f59e0b;
+      --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb;
+      --gray-400:#9ca3af; --gray-600:#4b5563; --gray-700:#374151; --gray-800:#1f2937;
+      --radius:10px; --shadow:0 2px 16px rgba(0,0,0,0.07);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+      background:#f8f9fc;color:var(--gray-800);line-height:1.75;font-size:15px;}
+
+    /* ── Layout ── */
+    .layout{display:flex;max-width:1200px;margin:0 auto;padding:0 16px;}
+    .sidebar{width:260px;min-width:260px;padding:32px 0 80px;position:sticky;
+      top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
+    .content{flex:1;padding:40px 0 80px 40px;min-width:0;}
+
+    /* ── Sidebar ── */
+    .sidebar-title{font-size:11px;font-weight:800;letter-spacing:.12em;
+      color:var(--primary);text-transform:uppercase;padding:0 16px 12px;
+      border-bottom:1px solid var(--gray-200);margin-bottom:12px;}
+    .nav-list{list-style:none;}
+    .nav-list li a{display:block;padding:6px 16px;font-size:13px;color:var(--gray-600);
+      text-decoration:none;border-radius:6px;transition:all .15s;line-height:1.4;}
+    .nav-list li a:hover,.nav-list li a.active{background:var(--primary-light);color:var(--primary);font-weight:600;}
+    .nav-sub{padding-left:12px;}
+    .nav-sub a{font-size:12px;padding:4px 16px;}
+
+    /* ── Header ── */
+    .page-header{background:linear-gradient(135deg,var(--primary) 0%,#7c3aed 100%);
+      color:#fff;padding:56px 24px 48px;text-align:center;margin-bottom:0;}
+    .page-header .badge{display:inline-block;background:rgba(255,255,255,.2);
+      border:1px solid rgba(255,255,255,.35);border-radius:999px;
+      padding:4px 16px;font-size:12px;letter-spacing:.08em;margin-bottom:16px;}
+    .page-header h1{font-size:clamp(20px,4vw,28px);font-weight:800;line-height:1.35;margin-bottom:10px;}
+    .page-header p{font-size:14px;opacity:.85;max-width:560px;margin:0 auto;}
+
+    /* ── Typography ── */
+    h2{font-size:20px;font-weight:800;color:var(--gray-800);margin:48px 0 16px;
+      padding-bottom:10px;border-bottom:2px solid var(--primary-light);}
+    h2 .sec-num{color:var(--primary);margin-right:6px;}
+    h3{font-size:16px;font-weight:700;color:var(--primary-dark);margin:32px 0 12px;}
+    h4{font-size:14px;font-weight:700;color:var(--gray-700);margin:20px 0 10px;}
+    p{margin-bottom:14px;color:var(--gray-700);}
+    ul,ol{margin:10px 0 14px 22px;}
+    ul li,ol li{margin-bottom:6px;color:var(--gray-700);}
+    strong{color:var(--gray-800);}
+    em{color:var(--gray-600);}
+
+    /* ── Callout / Quote ── */
+    .callout{background:var(--primary-light);border-left:4px solid var(--primary);
+      border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:18px 0;font-size:14px;}
+    .callout.warning{background:#fffbeb;border-left-color:var(--warning);}
+    .callout.success{background:#ecfdf5;border-left-color:var(--success);}
+    blockquote{background:var(--gray-50);border-left:4px solid var(--gray-400);
+      padding:12px 18px;margin:16px 0;font-size:14px;color:var(--gray-600);border-radius:0 8px 8px 0;}
+
+    /* ── Tables ── */
+    .table-wrap{overflow-x:auto;margin:16px 0 24px;border-radius:var(--radius);
+      box-shadow:var(--shadow);}
+    table{width:100%;border-collapse:collapse;background:#fff;font-size:13.5px;}
+    thead tr{background:linear-gradient(135deg,var(--primary),#7c3aed);}
+    thead th{color:#fff;padding:11px 14px;text-align:left;font-weight:700;
+      font-size:13px;white-space:nowrap;}
+    tbody tr{border-bottom:1px solid var(--gray-100);}
+    tbody tr:hover{background:var(--gray-50);}
+    tbody td{padding:10px 14px;vertical-align:top;color:var(--gray-700);}
+    tbody tr:last-child{border-bottom:none;}
+    .badge-cell{display:inline-block;padding:2px 10px;border-radius:999px;
+      font-size:12px;font-weight:700;}
+    .badge-green{background:#dcfce7;color:#166534;}
+    .badge-yellow{background:#fef9c3;color:#854d0e;}
+    .badge-red{background:#fee2e2;color:#991b1b;}
+    .badge-gray{background:var(--gray-100);color:var(--gray-600);}
+    .badge-blue{background:var(--primary-light);color:var(--primary-dark);}
+
+    /* ── Code / Pre ── */
+    pre{background:var(--gray-800);color:#e2e8f0;border-radius:var(--radius);
+      padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.65;
+      margin:16px 0 24px;font-family:'D2Coding','Consolas','Courier New',monospace;}
+    code{background:var(--gray-100);color:var(--primary-dark);padding:2px 6px;
+      border-radius:4px;font-size:13px;font-family:'D2Coding','Consolas',monospace;}
+    pre code{background:transparent;color:inherit;padding:0;}
+
+    /* ── Cards ── */
+    .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:24px;margin:16px 0 24px;}
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:16px 0 24px;}
+    .info-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:20px;border-top:4px solid var(--primary);}
+    .info-card h4{font-size:14px;color:var(--primary);margin:0 0 8px;}
+    .info-card p{font-size:13px;margin:0;color:var(--gray-600);}
+
+    /* ── Stat highlight ── */
+    .stat-row{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0 24px;}
+    .stat-box{flex:1;min-width:160px;background:#fff;border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:20px 24px;text-align:center;border-bottom:3px solid var(--primary);}
+    .stat-num{font-size:32px;font-weight:900;color:var(--primary);}
+    .stat-label{font-size:12px;color:var(--gray-600);margin-top:4px;}
+
+    /* ── Checklist ── */
+    .checklist{list-style:none;margin:12px 0 20px;padding:0;}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;padding:8px 14px;
+      border-radius:8px;font-size:13.5px;color:var(--gray-700);margin-bottom:4px;
+      background:var(--gray-50);border:1px solid var(--gray-100);}
+    .checklist li::before{content:'☐';color:var(--primary);font-size:16px;margin-top:-1px;}
+
+    /* ── Steps ── */
+    .steps{counter-reset:step;margin:16px 0 24px;}
+    .step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start;}
+    .step-num{width:32px;height:32px;min-width:32px;border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:14px;font-weight:800;}
+    .step-body h4{margin:0 0 6px;font-size:14px;color:var(--gray-800);}
+    .step-body p{margin:0;font-size:13.5px;color:var(--gray-600);}
+
+    /* ── Flow diagram ── */
+    .flow-wrap{display:flex;align-items:center;gap:0;flex-wrap:wrap;
+      margin:20px 0 28px;background:#fff;border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:24px;}
+    .flow-item{flex:1;min-width:120px;text-align:center;padding:12px;}
+    .flow-circle{width:72px;height:72px;border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),#7c3aed);
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:700;margin:0 auto 10px;line-height:1.3;}
+    .flow-label{font-size:12px;color:var(--gray-600);}
+    .flow-arrow{font-size:22px;color:var(--gray-400);padding:0 4px;align-self:center;}
+
+    /* ── Section anchor ── */
+    .anchor{scroll-margin-top:24px;}
+
+    /* ── Source index ── */
+    .source-table tbody td:first-child{font-weight:700;color:var(--primary);width:28px;}
+
+    /* ── Mobile ── */
+    @media(max-width:768px){
+      .sidebar{display:none;}
+      .layout{display:block;}
+      .content{padding:24px 0 60px;}
+      .flow-arrow{display:none;}
+      .stat-box{min-width:130px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <div class="badge">WHITEPAPER · PART 4</div>
+  <h1>AX 교육 도입 실행 가이드<br>— 진단에서 성과까지</h1>
+  <p>HR 매니저가 자기 조직에서 AI 교육을 시작하고 확산하기 위해 필요한<br>
+  의사결정 기준, 우선순위 판단 도구, 최소 실행안을 제공합니다.</p>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar TOC -->
+  <nav class="sidebar">
+    <div class="sidebar-title">목차</div>
+    <ul class="nav-list">
+      <li><a href="#overview">전체 흐름</a></li>
+      <li><a href="#diagnosis">1. 진단</a></li>
+      <ul class="nav-sub nav-list">
+        <li><a href="#maturity">1.1 영역별 성숙도 진단</a></li>
+        <li><a href="#levels">1.2 레벨 판정</a></li>
+        <li><a href="#imbalance">1.3 불균형 조치</a></li>
+      </ul>
+      <li><a href="#design">2. 설계</a></li>
+      <ul class="nav-sub nav-list">
+        <li><a href="#principles">2.1 설계 원칙</a></li>
+        <li><a href="#brief">2.1-1 경영진 브리프</a></li>
+        <li><a href="#priority">2.2 직무별 우선순위</a></li>
+        <li><a href="#stages">2.3 3단계 교육 구조</a></li>
+        <li><a href="#budget">2.4 예산 설계</a></li>
+        <li><a href="#roi">2.4-1 ROI 계산</a></li>
+        <li><a href="#scorecard">2.5 파트너 평가 스코어카드</a></li>
+      </ul>
+      <li><a href="#execution">3. 실행</a></li>
+      <ul class="nav-sub nav-list">
+        <li><a href="#matrix">3.1 파일럿 부서 매트릭스</a></li>
+        <li><a href="#pilot">3.2 파일럿 설계</a></li>
+        <li><a href="#tools">3.3 도구 배포</a></li>
+        <li><a href="#spread">3.4 확산</a></li>
+        <li><a href="#law">3.5 AI 기본법 대응</a></li>
+      </ul>
+      <li><a href="#measure">4. 측정</a></li>
+      <ul class="nav-sub nav-list">
+        <li><a href="#kpi">4.1 KPI 분리</a></li>
+        <li><a href="#report">4.2 경영진 보고 템플릿</a></li>
+      </ul>
+      <li><a href="#bysize">5. 기업 규모별 실행안</a></li>
+      <li><a href="#summary">6. 핵심 요약</a></li>
+      <li><a href="#sources">소스 인덱스</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main content -->
+  <main class="content">
+
+    <!-- 전체 흐름 -->
+    <section id="overview" class="anchor">
+      <h2><span class="sec-num">0</span>전체 흐름: 진단 → 설계 → 실행 → 측정</h2>
+      <div class="flow-wrap">
+        <div class="flow-item">
+          <div class="flow-circle">진단</div>
+          <div class="flow-label">우리 조직은<br>어디가 약한가?</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-circle">설계</div>
+          <div class="flow-label">누구에게,<br>무엇을 우선할 것인가?</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-circle">실행</div>
+          <div class="flow-label">파일럿으로 시작,<br>확산은 성과 기반</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-circle">측정</div>
+          <div class="flow-label">효과 확인 후<br>다음 사이클 반영</div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>핵심 인사이트 — Deloitte 2026 Human Capital Trends</strong><br>
+        · <strong>59%의 조직</strong>: 기술 중심 접근법(기존 프로세스에 AI 얹기)만 시도 → 제한된 성과<br>
+        · <strong>6%의 조직만</strong>: "교육 + 도구 + 프로세스 재설계" 결합 → 주요 성과 창출<br>
+        <br>HR은 교육 담당자가 아니라 <strong>"조직 변화 촉매자"</strong>로서의 역할을 해야 합니다.
+      </div>
+    </section>
+
+    <!-- 1. 진단 -->
+    <section id="diagnosis" class="anchor">
+      <h2><span class="sec-num">1</span>진단: 우리 조직은 어디가 약한가?</h2>
+
+      <section id="maturity" class="anchor">
+        <h3>1.1 영역별 성숙도 진단</h3>
+        <p>조직의 AI 교육 준비 상태는 단일 점수로 환산하면 왜곡됩니다. <strong>4개 영역 × 5문항, 0~2점 척도</strong>로 분리 진단하세요.</p>
+        <div class="card-grid">
+          <div class="info-card"><h4>0점</h4><p>없음 / 한 적 없음</p></div>
+          <div class="info-card"><h4>1점</h4><p>일부 시행 중 / 비공식적으로 존재</p></div>
+          <div class="info-card"><h4>2점</h4><p>제도화됨 / 문서화되어 운영 중</p></div>
+        </div>
+
+        <h4>A. 전략·리더십 (10점 만점)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>진단 문항</th><th>0</th><th>1</th><th>2</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>경영진이 AI를 전사 전략 의제로 공식 언급하고, 자원 배분 의사가 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>2</td><td>AI 도입·활용에 대한 전사 수준의 방향성(로드맵, 계획 등)이 존재한다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>3</td><td>AI 관련 의사결정 구조(전담 팀, 위원회, 협의체 등)가 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>4</td><td>AI 교육·역량 강화에 대한 별도 예산이 배정되어 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>5</td><td>AI 기본법 등 관련 법규의 영향을 검토한 적이 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>B. 교육·역량 (10점 만점)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>진단 문항</th><th>0</th><th>1</th><th>2</th></tr></thead>
+            <tbody>
+              <tr><td>6</td><td>전 직원 대상 AI 리터러시 교육을 1회 이상 실시했다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>7</td><td>역할·직무별로 차별화된 AI 교육 과정이 설계되어 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>8</td><td>AI 교육 성과를 측정하는 지표가 수료율·만족도 외에도 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>9</td><td>직원이 AI 도구를 안전하게 사용할 수 있는 가이드라인이 존재한다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>10</td><td>AI 활용 사례를 사내에서 공유·확산하는 채널이 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>C. 도구·인프라 (10점 만점)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>진단 문항</th><th>0</th><th>1</th><th>2</th></tr></thead>
+            <tbody>
+              <tr><td>11</td><td>업무에 사용할 수 있도록 승인된 AI 도구가 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>12</td><td>AI 도구 사용에 관한 보안·데이터 정책이 문서화되어 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>13</td><td>AI 도구의 사용 현황(사용률, 주요 용도)을 추적하고 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>14</td><td>사내 데이터와 AI를 연결하는 시스템(RAG, 사내 챗봇 등)이 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>15</td><td>비공식 AI 도구 사용(섀도우 AI)의 현황을 파악하고 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>D. 성과·문화 (10점 만점)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>진단 문항</th><th>0</th><th>1</th><th>2</th></tr></thead>
+            <tbody>
+              <tr><td>16</td><td>AI를 활용하여 업무 효율이 개선된 구체적 사례가 1건 이상 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>17</td><td>AI 활용이 성과 평가·목표 설정에 어떤 형태로든 반영되고 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>18</td><td>직원 다수가 AI를 위협보다 기회로 인식하고 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>19</td><td>AI를 활용한 업무 프로세스 재설계가 1건 이상 완료됐다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+              <tr><td>20</td><td>AI 관련 실험·실패에 대해 허용적인 분위기가 있다</td><td>☐</td><td>☐</td><td>☐</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="levels" class="anchor">
+        <h3>1.2 결과 해석: 총점이 아니라 영역별 균형을 본다</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>레벨</th><th>총점 범위</th><th>필수 게이트 조건</th><th>의미</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge-cell badge-gray">Level 1</span> 인식</td><td>0~10</td><td>—</td><td>관심은 있으나 체계적 준비 없음</td></tr>
+              <tr><td><span class="badge-cell badge-yellow">Level 2</span> 실험</td><td>11~18</td><td>A에서 4점 이상</td><td>부분적 시도 중, 리더십 기반 최소 확보</td></tr>
+              <tr><td><span class="badge-cell badge-blue">Level 3</span> 확산</td><td>19~28</td><td>A 6점+, B·C 각 5점 이상</td><td>전사 전략과 교육·도구 체계 갖춰지기 시작</td></tr>
+              <tr><td><span class="badge-cell badge-green">Level 4</span> 최적화</td><td>29~35</td><td>D에서 6점 이상</td><td>실제 성과가 나오고 문화로 정착 중</td></tr>
+              <tr><td><span class="badge-cell badge-green" style="background:#d1fae5;color:#064e3b;">Level 5</span> AI 네이티브</td><td>36~40</td><td>전 영역 7점 이상</td><td>전 영역 균형 + 다수의 성과 사례</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <strong>핵심:</strong> 총점이 높아도 특정 영역이 극단적으로 낮으면 레벨이 올라가지 않습니다. HR은 "총점"이 아니라 <strong>"가장 약한 영역"</strong>을 먼저 보강하는 것이 우선순위입니다.
+        </div>
+      </section>
+
+      <section id="imbalance" class="anchor">
+        <h3>1.3 영역별 불균형 시 우선 조치</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>약한 영역</th><th>증상</th><th>우선 조치</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A(전략·리더십) 낮음</strong></td><td>현장은 움직이고 싶은데 경영진 지지가 없음</td><td>경영진 대상 AI 전략 브리핑(2시간), 타사 벤치마크 제시</td></tr>
+              <tr><td><strong>B(교육·역량) 낮음</strong></td><td>도구는 있는데 쓸 줄 아는 사람이 없음</td><td>전 직원 기초 리터러시 교육 우선 실시</td></tr>
+              <tr><td><strong>C(도구·인프라) 낮음</strong></td><td>교육은 했는데 실무에 적용할 도구가 없음</td><td>승인된 AI 도구 선정 + 보안 가이드라인 수립</td></tr>
+              <tr><td><strong>D(성과·문화) 낮음</strong></td><td>도입은 했는데 쓰는 사람이 소수, 효과를 모름</td><td>유즈케이스 공유 채널 + 성과 측정 체계 구축</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- 2. 설계 -->
+    <section id="design" class="anchor">
+      <h2><span class="sec-num">2</span>설계: 누구에게, 무엇을 우선할 것인가?</h2>
+
+      <section id="principles" class="anchor">
+        <h3>2.1 설계의 핵심 원칙</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><h4>역할·직무별 학습 목표를 분리하라</h4><p>"전 직원 동일 교육"은 효과가 낮습니다. 마케팅, 인사, 재무, 개발, 고객 상담은 AI 활용 맥락이 완전히 다릅니다.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><h4>기초 단계에서는 표준화 콘텐츠가 중요하다</h4><p>최신성·기술 검수 체계·학습자 이해도·현업 적용 사례를 기준으로 선정하세요.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><h4>심화 단계에서는 현업 문제 해결형 실습을 결합하라</h4><p>실제 업무 과제에 AI를 적용하는 프로젝트를 포함해야 학습 전이가 일어납니다.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><h4>교육은 도구 접근 및 업무 환경 변화와 함께 설계하라</h4><p>도구 배포, 사용 가이드라인, 워크플로우 재설계, 관리자 참여가 결합될 때 성과가 나옵니다.</p></div></div>
+        </div>
+      </section>
+
+      <section id="brief" class="anchor">
+        <h3>2.1-1 경영진 설득용 1-Page 브리프 템플릿</h3>
+        <pre>┌─────────────────────────────────────────────────────────┐
+│  AI 교육·도입 추진 제안서 (1-Page Brief)                  │
+├─────────────────────────────────────────────────────────┤
+│  ■ 왜 지금 AI 교육인가 (핵심 데이터 3개)                  │
+│                                                           │
+│  ① McKinsey: "AI 기술 1달러 투입 시 인력에 5달러 필요"   │
+│  ② Deloitte: 성과 나는 6%는 "교육+도구+프로세스" 결합    │
+│  ③ KPMG: "지속적 투자·교육·변화관리 없이는 AI 가치 불가" │
+│                                                           │
+│  ■ 우리 조직의 현재 위치 (자가진단 결과)                  │
+│  현 상태: Level ___   가장 약한 영역: ___ (A/B/C/D)      │
+│  파일럿 추천 부서: ________________                       │
+│                                                           │
+│  ■ 우리의 제안: 파일럿 계획                               │
+│  대상: ____ 부서, ____ 명    기간: ____ 개월              │
+│  투입 예산: ____ 만 원                                    │
+│  예상 효과: 월 ____ 시간 절감 / 유즈케이스 __건 확보      │
+│                                                           │
+│  ★ 6개월 추가 확산 시 ROI 양수 전환 가능                  │
+└─────────────────────────────────────────────────────────┘</pre>
+      </section>
+
+      <section id="priority" class="anchor">
+        <h3>2.2 직무·리스크 기반 교육 우선순위 매핑</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>직무군</th><th>AI 활용 핵심</th><th>데이터 민감도</th><th>교육 설계 포인트</th><th>우선순위</th></tr></thead>
+            <tbody>
+              <tr><td><strong>HR 채용·평가</strong></td><td>AI 면접, 서류 스크리닝</td><td><span class="badge-cell badge-red">높음</span></td><td>AI 거버넌스·윤리 우선, AI 기본법 대응 필수</td><td>거버넌스 교육 최우선</td></tr>
+              <tr><td><strong>마케팅·콘텐츠</strong></td><td>AI 콘텐츠 생성, 데이터 분석</td><td><span class="badge-cell badge-yellow">중간</span></td><td>실험 가능성 높음, 유즈케이스 확보 용이</td><td>파일럿 부서로 적합</td></tr>
+              <tr><td><strong>재무·회계</strong></td><td>AI 보고서, 예측, 이상 탐지</td><td><span class="badge-cell badge-red">높음</span></td><td>정확도 검증이 핵심, 인간 검토 필수</td><td>정확도 검증 체계 우선</td></tr>
+              <tr><td><strong>개발·엔지니어링</strong></td><td>AI 코딩 어시스턴트, 테스트 자동화</td><td><span class="badge-cell badge-yellow">중간</span></td><td>생산성 향상 + 코드 품질 통제 병행</td><td>생산성·품질 동시 측정</td></tr>
+              <tr><td><strong>고객 서비스</strong></td><td>AI 응대, FAQ 자동화, 감정 분석</td><td><span class="badge-cell badge-red">높음</span></td><td>응답 품질·리스크 관리 우선</td><td>품질·리스크 관리 우선</td></tr>
+              <tr><td><strong>생산·제조·현장</strong></td><td>예측정비, 품질 검사</td><td><span class="badge-cell badge-yellow">중간</span></td><td>안전 교육 병행, VR/AR 시뮬레이션 활용</td><td>안전·현장 적용 우선</td></tr>
+              <tr><td><strong>경영진·리더</strong></td><td>AI 전략 판단, 변화 관리</td><td>—</td><td>AI가 비즈니스를 바꾸는 맥락 이해</td><td>짧고 집중된 세미나형</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="stages" class="anchor">
+        <h3>2.3 교육 단계: 3단계 구조 (2+1)</h3>
+        <div class="card-grid">
+          <div class="info-card" style="border-top-color:#06b6d4;">
+            <h4 style="color:#0e7490;">1단계: 전사 공통 기반 (전 직원)</h4>
+            <p><strong>목적:</strong> AI 리터러시 + 공통 언어 정렬<br>
+            <strong>형태:</strong> 온라인 자기주도 학습 (4~8시간)<br>
+            <strong>지표:</strong> 수료율, 기초 진단 점수 변화</p>
+          </div>
+          <div class="info-card">
+            <h4>2단계: 우선 직무 파일럿 (1~2개 직무)</h4>
+            <p><strong>목적:</strong> 실제 업무 1~3건 AI로 개선, 측정 가능한 사례 확보<br>
+            <strong>형태:</strong> 블렌디드 (온라인 + 대면 실습 + 업무 적용)<br>
+            <strong>지표:</strong> 유즈케이스 건수, 업무 시간 변화</p>
+          </div>
+          <div class="info-card" style="border-top-color:#7c3aed;">
+            <h4 style="color:#5b21b6;">3단계: 핵심 인재 심화 (소수 선발)</h4>
+            <p><strong>목적:</strong> AI 챔피언 양성, 프로젝트형 멘토링<br>
+            <strong>형태:</strong> PBL + 전문가 밀착 멘토링<br>
+            <strong>지표:</strong> 유즈케이스 비즈니스 임팩트, 내부 확산 활동 건수</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="budget" class="anchor">
+        <h3>2.4 예산 설계: McKinsey "1:5 투자 비율"</h3>
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-num">17%</div><div class="stat-label">AI 기술·도구·인프라</div></div>
+          <div class="stat-box" style="border-bottom-color:#7c3aed;"><div class="stat-num" style="color:#7c3aed;">59%</div><div class="stat-label">인력 개발·교육 (핵심)</div></div>
+          <div class="stat-box" style="border-bottom-color:#06b6d4;"><div class="stat-num" style="color:#06b6d4;">18%</div><div class="stat-label">거버넌스·정책·리스크</div></div>
+          <div class="stat-box" style="border-bottom-color:#10b981;"><div class="stat-num" style="color:#10b981;">6%</div><div class="stat-label">변화 관리·조직 개발</div></div>
+        </div>
+        <pre>총 교육 예산 = ① 공통 콘텐츠비 (기초 리터러시)
+             + ② 직무별 심화 교육비 (워크숍, 멘토링)
+             + ③ AI 도구 라이선스비 (교육 기간 중)
+             + ④ 거버넌스 체계 구축비 (AI 기본법 대응)
+             + ⑤ 운영관리비 (LMS, 진도 관리, 성과 측정)
+             + ⑥ 변화 관리비 (경영진 세미나, 내부 커뮤니케이션)</pre>
+      </section>
+
+      <section id="roi" class="anchor">
+        <h3>2.4-1 AI 교육 ROI 계산 가이드</h3>
+        <h4>Step 1: 투입 비용 항목 산정 (예시)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>항목</th><th>대상</th><th>단가</th><th>소계</th></tr></thead>
+            <tbody>
+              <tr><td>1단계 기초 온라인 콘텐츠</td><td>500명</td><td>150,000</td><td>75,000,000</td></tr>
+              <tr><td>2단계 직무별 워크숍 개발</td><td>3회</td><td>5,000,000</td><td>15,000,000</td></tr>
+              <tr><td>1단계 운영 (사내 담당자)</td><td>3개월</td><td>5,000,000</td><td>15,000,000</td></tr>
+              <tr><td>2단계 외부 강사</td><td>10일</td><td>1,500,000</td><td>15,000,000</td></tr>
+              <tr><td>3단계 전문가 멘토링</td><td>6개월</td><td>3,000,000</td><td>18,000,000</td></tr>
+              <tr><td>AI 도구 라이선스 (3개월)</td><td>500명</td><td>120,000</td><td>60,000,000</td></tr>
+              <tr><td>LMS·진도 관리 시스템</td><td>3개월</td><td>2,000,000</td><td>6,000,000</td></tr>
+              <tr><td>학습 시간 기회비용</td><td>3,000시간</td><td>50,000</td><td>150,000,000</td></tr>
+              <tr><td colspan="3"><strong>합계</strong></td><td><strong>357,000,000</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Step 3: ROI 계산</h4>
+        <pre>ROI (%) = (산출 효과 - 투입 비용) / 투입 비용 × 100
+
+3개월 단기: ROI = (113,750,000 - 357,000,000) / 357,000,000 × 100 = -68%
+→ 단기 음수 ROI는 정상. 투입 3.57억 원, 월 효과 1,300만 원 → 약 28개월 회수</pre>
+
+        <div class="callout warning">
+          <strong>경영진 보고 전략:</strong> "AI 교육 덕분에 X% 절감됐다"보다 <strong>"AI 교육과 도구 도입 이후 X% 변화가 관측됐다"</strong>로 표현하는 것이 더 정확하고 신뢰를 줍니다.
+        </div>
+      </section>
+
+      <section id="scorecard" class="anchor">
+        <h3>2.5 외부 교육 파트너 평가 스코어카드</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>영역</th><th>가중치</th><th>평가 기준</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A. 콘텐츠 품질</strong></td><td>25%</td><td>최신성, 기술 정확도, 한국화 수준</td></tr>
+              <tr><td><strong>B. 강사·멘토 역량</strong></td><td>25%</td><td>실무 경험, 전달력, 참고사례 현실성</td></tr>
+              <tr><td><strong>C. 커스터마이징 능력</strong></td><td>20%</td><td>조직 맥락 반영도, 설계 유연성</td></tr>
+              <tr><td><strong>D. 성과 측정 체계</strong></td><td>20%</td><td>측정 지표, 사후 지원 체계</td></tr>
+              <tr><td><strong>E. 가격·계약 조건</strong></td><td>10%</td><td>예산 대비 가성비, 결제 조건 유연성</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre>파트너 A = 3.33×0.25 + 4.0×0.25 + 3.5×0.2 + 2.5×0.2 + 4.0×0.1 = 3.43점
+파트너 B = 4.67×0.25 + 4.33×0.25 + 4.5×0.2 + 4.5×0.2 + 3.5×0.1 = 4.40점
+
+→ 4.0점 이상: 우수  |  3.5~3.99점: 중상  |  3.5점 미만: 재검토</pre>
+      </section>
+    </section>
+
+    <!-- 3. 실행 -->
+    <section id="execution" class="anchor">
+      <h2><span class="sec-num">3</span>실행: 파일럿으로 시작하고, 성과로 확산한다</h2>
+
+      <section id="matrix" class="anchor">
+        <h3>3.1 파일럿 부서 선정 매트릭스 (2×2)</h3>
+        <div class="card" style="font-family:monospace;font-size:13px;background:#1e293b;color:#e2e8f0;line-height:1.8;">
+<pre style="background:transparent;color:#e2e8f0;margin:0;padding:0;">
+                Y축: 성과 가시성 (높음 ↑)
+                        │
+    [좌상] 높은 관심     │  [우상] ★ 최우선 파일럿
+    낮은 기술 용이성     │  (적용 용이 + 성과 명확)
+                        │  예: 마케팅, 콘텐츠, 영업기획
+────────────────────────┼──────────────────→ X축: AI 적용 용이성
+    [좌하] 낮은 관심     │  [우하] △ 2순위
+    낮은 기술 용이성     │  (적용 용이 + 성과 측정 어려움)
+                (낮음 ↓)│  예: 개발팀, IT
+</pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>사분면</th><th>부서 예시</th><th>선정</th><th>전략</th></tr></thead>
+            <tbody>
+              <tr><td>★ 우상 (최우선)</td><td>마케팅, 콘텐츠, 영업 기획</td><td><span class="badge-cell badge-green">추천</span></td><td>빠른 성과 가시화 → 경영진 설득 → 예산 확보</td></tr>
+              <tr><td>△ 좌상 (2순위)</td><td>인사, 재무</td><td><span class="badge-cell badge-yellow">조건부</span></td><td>외부 전문가 지원 필수</td></tr>
+              <tr><td>☆ 우하</td><td>개발팀, IT</td><td><span class="badge-cell badge-gray">비추천</span></td><td>장기 프로젝트로 별도 추진</td></tr>
+              <tr><td>✗ 좌하</td><td>총무, 법무</td><td><span class="badge-cell badge-red">제외</span></td><td>이후 단계에서 추진</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="pilot" class="anchor">
+        <h3>3.2 파일럿 설계 일정</h3>
+        <div class="callout">
+          <strong>핵심:</strong> 팀장이 동의해도 상위 임원의 업무 압박으로 파일럿이 무산될 수 있습니다. <strong>부서장(임원급)의 스폰서십이 확보된 부서</strong>를 선정하는 것이 실패 확률을 줄이는 핵심입니다.
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>주차</th><th>활동</th><th>산출물</th><th>관련 부서</th></tr></thead>
+            <tbody>
+              <tr><td>1주</td><td>파일럿 부서 선정 + <strong>부서장 스폰서십 확보</strong> + 팀장 동의</td><td>대상 부서·인원 확정</td><td>HR + 현업</td></tr>
+              <tr><td>1~2주</td><td>AI 도구 배포 + 사용 원칙·보안 가이드 수립</td><td>승인 도구 목록, 가이드 문서</td><td>HR + IT·보안</td></tr>
+              <tr><td>2~3주</td><td>1단계 기초 교육 실시</td><td>수료율, 진단 점수</td><td>HR</td></tr>
+              <tr><td>3~6주</td><td>2단계 직무별 실습 + 업무 적용</td><td>유즈케이스 목록 (팀당 2~3건)</td><td>HR + 현업</td></tr>
+              <tr><td>6~12주</td><td>3단계 심화 (선발자)</td><td>완성 유즈케이스, 효과 데이터</td><td>HR + 현업 + 외부 멘토</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="tools" class="anchor">
+        <h3>3.3 도구 배포와 교육의 관계</h3>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><h4>승인된 AI 도구 선정</h4><p>HR 단독이 아닌 <strong>초기 기획 단계부터 IT·보안 팀을 워킹그룹으로 참여</strong>시켜야 합니다. 보안 리뷰를 나중에 받으면 반려되거나 지연될 가능성이 높습니다.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><h4>사용 원칙·보안 가이드라인 수립</h4><p>데이터 입력 범위, 결과물 검증 기준 등 — IT·보안 워킹그룹과 공동 작성</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><h4>가이드라인과 함께 도구 배포 + 1단계 교육 병행</h4></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><h4>사용 현황 추적 시작</h4><p>섀도우 AI 현황 파악 포함</p></div></div>
+        </div>
+      </section>
+
+      <section id="spread" class="anchor">
+        <h3>3.4 확산: 파일럿 성과가 근거다</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>확산 활동</th><th>방법</th></tr></thead>
+            <tbody>
+              <tr><td>파일럿 성과 사내 공유</td><td>사내 세미나, 뉴스레터, 유즈케이스 갤러리</td></tr>
+              <tr><td>전사 1단계 교육 확대</td><td>온라인 자기주도 학습으로 확장 (파일럿 검증 콘텐츠 활용)</td></tr>
+              <tr><td>추가 부서 2단계 확대</td><td>파일럿 부서의 AI 챔피언이 다른 부서 온보딩 지원</td></tr>
+              <tr><td>AI 거버넌스 체계 수립</td><td>AI 기본법 대응 + 사내 AI 정책 문서화</td></tr>
+              <tr><td>교육 체계 제도화</td><td>연간 AI 교육 계획 수립, 성과 평가 반영</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="law" class="anchor">
+        <h3>3.5 AI 기본법 대응 — HR의 역할 범위</h3>
+        <div class="card-grid">
+          <div class="info-card" style="border-top-color:#10b981;">
+            <h4 style="color:#065f46;">HR이 주도할 범위</h4>
+            <ul style="font-size:13px;color:var(--gray-600);padding-left:16px;">
+              <li>HR 관련 AI 시스템 목록 작성</li>
+              <li>고영향 AI 해당 여부 법무와 공동 검토</li>
+              <li>AI 채용 도구 사용 시 지원자 사전 고지</li>
+              <li>전 직원 AI 리터러시 기초 교육 기획·운영</li>
+            </ul>
+          </div>
+          <div class="info-card" style="border-top-color:#f59e0b;">
+            <h4 style="color:#92400e;">법무·보안·IT와 공동 대응</h4>
+            <ul style="font-size:13px;color:var(--gray-600);padding-left:16px;">
+              <li>고영향 AI 사전 평가·모니터링 체계</li>
+              <li>AI 의사결정 결과 설명 가능성 확보</li>
+              <li>관련 기록의 5년 보관 체계 수립</li>
+              <li>전사 AI 거버넌스 정책 문서화</li>
+            </ul>
+          </div>
+        </div>
+        <blockquote>AI 기본법은 2026.01.22 시행, 정부는 최소 1년 이상 계도기간 운영 중. 유예는 "아무것도 안 해도 된다"가 아닌, 내부 점검과 체계 정비를 진행하라는 성격입니다. <strong>인공지능기본법 지원데스크(sw.or.kr)</strong>에서 자문을 받을 수 있습니다.</blockquote>
+      </section>
+    </section>
+
+    <!-- 4. 측정 -->
+    <section id="measure" class="anchor">
+      <h2><span class="sec-num">4</span>측정: 효과를 확인하고 다음 사이클에 반영한다</h2>
+
+      <section id="kpi" class="anchor">
+        <h3>4.1 두 종류의 KPI를 분리하라</h3>
+        <div class="card-grid">
+          <div class="card">
+            <h4 style="color:var(--primary);margin-bottom:12px;">A. 운영용 KPI (HR·HRD 팀)</h4>
+            <div class="table-wrap" style="margin:0;">
+              <table>
+                <thead><tr><th>지표</th><th>목표 예시</th></tr></thead>
+                <tbody>
+                  <tr><td>수료율</td><td>1단계 90% 이상</td></tr>
+                  <tr><td>사전/사후 진단 점수 변화</td><td>20%+ 향상</td></tr>
+                  <tr><td>AI 도구 주간 활성 사용자</td><td>배포 인원의 50%+</td></tr>
+                  <tr><td>유즈케이스 제출 건수</td><td>파일럿 팀당 2건 이상</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h4 style="color:#7c3aed;margin-bottom:12px;">B. 경영진 보고용 KPI (비즈니스 임팩트)</h4>
+            <div class="table-wrap" style="margin:0;">
+              <table>
+                <thead><tr><th>지표</th><th>설명</th></tr></thead>
+                <tbody>
+                  <tr><td>핵심 업무 내 AI 사용률</td><td>실제 활용 비율</td></tr>
+                  <tr><td>업무 시간 변화</td><td>전후 비교</td></tr>
+                  <tr><td>산출물 품질 변화</td><td>오류율, 재작업률</td></tr>
+                  <tr><td>유즈케이스별 추정 효과</td><td>시간 절감 × 인건비</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="report" class="anchor">
+        <h3>4.2 경영진 보고 템플릿 (분기별)</h3>
+        <pre>┌────────────────────────────────────────────────────┐
+│  AI 교육·활용 성과 보고 — 202X년 QX                  │
+├────────────────────────────────────────────────────┤
+│  ■ 요약 (한 문장)                                    │
+│  파일럿 부서에서 예상 목표의 ___% 달성, 확산 단계 진입  │
+│                                                      │
+│  ■ 교육 진행 현황                                    │
+│  · 1단계 수료율: ___% (전사 ___명 중 ___명)          │
+│  · 유즈케이스 확보: ___건 (목표 대비 ___%)           │
+│                                                      │
+│  ■ 비즈니스 임팩트 (관측치)                           │
+│  · 대상 업무 소요시간 변화: ___% (전/후 비교)         │
+│  · 유즈케이스별 추정 효과: ___만 원/월               │
+│  · 비고: 도구 도입·프로세스 개선·관리자 참여 복합 효과  │
+│                                                      │
+│  ■ 다음 분기 계획                                    │
+│  · 확산 대상: _______________ (부서/인원)            │
+│  · 추가 필요 예산: ___만 원                          │
+│  · AI 기본법 대응 진행률: ___% (마일스톤: _______)   │
+└────────────────────────────────────────────────────┘</pre>
+      </section>
+    </section>
+
+    <!-- 5. 기업 규모별 -->
+    <section id="bysize" class="anchor">
+      <h2><span class="sec-num">5</span>기업 규모별 최소 실행안</h2>
+
+      <h3>대기업 (1,000명+)</h3>
+      <div class="table-wrap">
+        <table><thead><tr><th>기간</th><th>핵심 활동</th></tr></thead>
+        <tbody>
+          <tr><td>1~2개월</td><td>영역별 성숙도 진단 + 직무·리스크 기반 우선순위 설정</td></tr>
+          <tr><td>2~3개월</td><td>3단계 교육 설계, 외부 파트너 선정, AI 기본법 대응 착수</td></tr>
+          <tr><td>3~6개월</td><td>2~3개 부서 동시 파일럿 + 전사 1단계 교육 병행</td></tr>
+          <tr><td>6~12개월</td><td>파일럿 성과 기반 확산 + 분기별 경영진 보고</td></tr>
+        </tbody></table>
+      </div>
+
+      <h3>중견기업 (300~1,000명)</h3>
+      <div class="table-wrap">
+        <table><thead><tr><th>기간</th><th>핵심 활동</th></tr></thead>
+        <tbody>
+          <tr><td>2~4주</td><td>자가진단 + HR 부서 내 역량 점검</td></tr>
+          <tr><td>1~2개월</td><td>1~2단계 설계, 외부 파트너 1곳 선정</td></tr>
+          <tr><td>2~6개월</td><td>1개 부서 파일럿 → 성과 측정 → 확산 근거 확보</td></tr>
+        </tbody></table>
+      </div>
+
+      <h3>중소기업 (300명 미만)</h3>
+      <div class="table-wrap">
+        <table><thead><tr><th>기간</th><th>핵심 활동</th></tr></thead>
+        <tbody>
+          <tr><td>1개월</td><td>대표/실무 리더 정렬 (AI로 무엇을 할 것인가 합의)</td></tr>
+          <tr><td>2개월</td><td>공통 AI 도구·가이드 배포 + 1단계 기초 교육</td></tr>
+          <tr><td>3개월</td><td>반복 업무 2~3건을 AI로 개선, 사례 확보</td></tr>
+          <tr><td>분기 말</td><td>사례 3건 이상 확보 → 다음 분기 확대 여부 판단</td></tr>
+        </tbody></table>
+      </div>
+
+      <h3>스타트업/테크 기업 (50~300명, AI 역량 보유)</h3>
+      <div class="table-wrap">
+        <table><thead><tr><th>기간</th><th>핵심 활동</th></tr></thead>
+        <tbody>
+          <tr><td>2주</td><td>CTO/기술 리더와 HR 정렬 — AI를 실무에 즉시 적용할 직무 3개 선정</td></tr>
+          <tr><td>3주</td><td>공개 AI 교육 자료 + 사내 라이브 세션</td></tr>
+          <tr><td>4~6주</td><td>선정 직무 3개 팀에서 파일럿 → 각 팀 1건 이상 유즈케이스 산출</td></tr>
+          <tr><td>분기 말</td><td>팀별 학습 사례 공유 + 반복 (다음 사이클: 새로운 3개 직무 추가)</td></tr>
+        </tbody></table>
+      </div>
+    </section>
+
+    <!-- 6. 핵심 요약 -->
+    <section id="summary" class="anchor">
+      <h2><span class="sec-num">6</span>핵심 요약</h2>
+      <div class="card-grid">
+        <div class="info-card">
+          <h4>① 가장 약한 영역부터</h4>
+          <p>총점이 아니라 영역별 균형이 성숙도를 결정합니다. 도구만 깔고 전략이 없으면, 도구를 더 깔 게 아니라 경영진 정렬부터 해야 합니다.</p>
+        </div>
+        <div class="info-card">
+          <h4>② 성과가 보이기 쉬운 곳에서 시작</h4>
+          <p>반복 업무가 많고, 측정이 쉽고, 팀장이 협조적인 부서. 여기서 나온 숫자가 전사 확산의 가장 강력한 무기입니다.</p>
+        </div>
+        <div class="info-card">
+          <h4>③ 교육 + 도구 + 프로세스의 결합</h4>
+          <p>교육만 해서는 워크플로우가 바뀌지 않습니다. 도구만 배포해서도 제대로 쓰이지 않습니다.</p>
+        </div>
+        <div class="info-card">
+          <h4>④ 비즈니스 변화로 보고</h4>
+          <p>"만족도 4.5점"은 경영진에게 의미가 없습니다. "이 업무의 소요시간이 X% 줄었다"가 다음 예산을 만듭니다.</p>
+        </div>
+      </div>
+      <div class="callout success" style="margin-top:24px;">
+        <strong>경영진에게 전할 한 문장</strong><br><br>
+        <em>"AI 교육의 성과는 교육 자체가 아니라, 교육이 촉발하는 업무 방식의 변화에서 나옵니다. 이 변화를 설계하고, 실행하고, 측정하는 체계를 갖추는 것이 HR의 새로운 역할입니다."</em>
+      </div>
+    </section>
+
+    <!-- 소스 인덱스 -->
+    <section id="sources" class="anchor">
+      <h2>소스 인덱스</h2>
+      <div class="table-wrap">
+        <table class="source-table">
+          <thead><tr><th>#</th><th>소스</th><th>활용 포인트</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>파트 1: AI 성숙도 5단계 모델</td><td>자가진단의 기반 구조 (McKinsey Rewired + 업계 성숙도 모델)</td></tr>
+            <tr><td>2</td><td>파트 2: JPMorgan "Learn by Doing"</td><td>도구 접근과 교육의 관계</td></tr>
+            <tr><td>3</td><td>파트 3: 코멘토 HRD포럼</td><td>유즈케이스 창출 모델, 2026 마일스톤</td></tr>
+            <tr><td>4</td><td>파트 3: 휴넷 설문</td><td>만족도 72%, 현업 적용도 21.6%</td></tr>
+            <tr><td>5</td><td>파트 3: AI 기본법</td><td>고영향 AI, 계도기간, HR 영향</td></tr>
+            <tr><td>6</td><td>McKinsey, State of AI 2025</td><td>워크플로우 재설계가 가장 강력한 성과 예측 변수</td></tr>
+            <tr><td>7</td><td>McKinsey "1:5 투자 비율" (2025)</td><td>AI 기술 1달러 당 인력 5달러 투자의 필요성</td></tr>
+            <tr><td>8</td><td>Deloitte 2026 Human Capital Trends</td><td>59% 기술 중심 vs 6% 교육+도구+프로세스 결합</td></tr>
+            <tr><td>9</td><td>KPMG Q1 2026</td><td>"지속적 투자·교육·변화관리의 필수성"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--gray-400);text-align:center;margin-top:24px;">
+        → 다음 파트 연결: 파트 5에서는 2026~2028년 전망과 HR의 새로운 역할을 다룹니다.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('.anchor');
+  const navLinks = document.querySelectorAll('.nav-list a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        navLinks.forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        const active = document.querySelector(`.nav-list a[href="#${id}"]`);
+        if(active) active.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
